@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caf&eacute; Cielo</title>
+  <meta name="description" content="Men&uacute; digital de Caf&eacute; Cielo con bebidas, t&eacute;s, crepas y paninis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&family=Pacifico&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body id="body" class="theme-dark">
+  <div class="page-glow page-glow-left"></div>
+  <div class="page-glow page-glow-right"></div>
+
+  <main class="shell">
+    <header class="topbar glass reveal">
+      <div class="brand">
+        <img class="brand-logo brand-logo-light" src="img/logo-cafe-cielo-light.svg" alt="Logo de Caf&eacute; Cielo">
+        <img class="brand-logo brand-logo-dark" src="img/logo-cafe-cielo-dark.svg" alt="Logo de Caf&eacute; Cielo">
+      </div>
+
+      <nav class="main-nav" aria-label="Principal">
+        <a href="#menu" class="nav-link is-active">Men&uacute;</a>
+        <a href="#about" class="nav-link">Sobre Nosotros</a>
+        <a href="#contact" class="nav-link">Contacto</a>
+      </nav>
+
+      <div class="toolbar">
+        <button class="hamburger-btn" id="hamburgerToggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <button class="mode-chip mode-chip-light" type="button" aria-hidden="true">&#9728;</button>
+        <button class="theme-switch" id="themeToggle" type="button" aria-label="Cambiar tema">
+          <span class="theme-switch-track"></span>
+          <span class="theme-switch-thumb"></span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="mobile-nav-panel" id="mobileNav" aria-label="Menu movil" hidden>
+      <a href="#mobileExperience" class="mobile-nav-link">Men&uacute;</a>
+      <a href="#about-mobile" class="mobile-nav-link">Sobre Nosotros</a>
+      <a href="#contact-mobile" class="mobile-nav-link">Contacto</a>
+    </nav>
+
+    <section class="hero glass reveal">
+      <div class="hero-copy">
+        <p class="eyebrow">Edici&oacute;n del barista</p>
+        <h2>Bienvenido a Caf&eacute; Cielo</h2>
+        <div class="hero-divider">
+          <span></span>
+          <i>&#9733;</i>
+          <span></span>
+        </div>
+        <p class="hero-subtitle">Explora nuestro men&uacute; con bebidas acogedoras, antojos deli y una vista pensada para lucirse en QR.</p>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image hero-image-left">
+          <img src="img/productos/capuchino.png" alt="Capuchino de Caf&eacute; Cielo">
+        </div>
+        <div class="hero-image hero-image-right floating">
+          <img src="img/productos/latte.png" alt="Latte especial de Caf&eacute; Cielo">
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="menu-layout reveal">
+      <div class="menu-main glass">
+        <div class="category-strip" id="categoryStrip" role="tablist" aria-label="Categor&iacute;as del men&uacute;"></div>
+
+        <section class="content-grid">
+          <div class="menu-feed">
+            <article class="featured reveal">
+              <div class="section-head">
+                <div class="section-title-wrap">
+                  <span class="section-icon">&#128293;</span>
+                  <h3>Recomendados</h3>
+                </div>
+                <span class="section-dots" aria-hidden="true">...</span>
+              </div>
+
+              <div class="featured-card">
+                <div class="featured-media">
+                  <span class="tag">Popular</span>
+                  <img src="img/productos/latte.png" alt="Latte Dulce Coraz&oacute;n">
+                </div>
+                <div class="featured-content">
+                  <div class="tag tag-inline">Popular</div>
+                  <h4>Latte Dulce Coraz&oacute;n</h4>
+                  <p>Espresso, leche condensada, crema y canela.</p>
+                  <button class="price-pill" type="button">$60</button>
+                </div>
+              </div>
+            </article>
+
+            <section class="menu-section reveal" id="section-primary">
+              <div class="section-head">
+                <div class="section-title-wrap">
+                <span class="section-icon" id="primaryIcon">&#9749;</span>
+                  <h3 id="primaryTitle">Bebidas Calientes</h3>
+                </div>
+                <span class="section-dots" aria-hidden="true">...</span>
+              </div>
+              <div class="card-grid" id="primaryGrid"></div>
+            </section>
+          </div>
+
+          <aside class="dark-panel reveal">
+            <div class="section-head section-head-dark">
+              <div class="section-title-wrap">
+                <span class="section-icon" id="secondaryIcon">&#129482;</span>
+                <h3 id="secondaryTitle">Bebidas Fr&iacute;as</h3>
+              </div>
+              <span class="section-dots" aria-hidden="true">...</span>
+            </div>
+
+            <div class="stack-list" id="secondaryList"></div>
+
+            <div class="section-head section-head-dark stacked-title">
+              <div class="section-title-wrap">
+                <span class="section-icon">&#127861;</span>
+                <h3>T&eacute;s destacados</h3>
+              </div>
+              <span class="section-dots" aria-hidden="true">...</span>
+            </div>
+
+            <div class="mini-list" id="teaList"></div>
+          </aside>
+        </section>
+      </div>
+
+      <aside class="phone-preview reveal" id="mobileExperience">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-top">
+              <div class="phone-brand">
+                <img class="phone-logo phone-logo-light" src="img/logo-cafe-cielo-light.svg" alt="Logo de Caf&eacute; Cielo">
+                <img class="phone-logo phone-logo-dark" src="img/logo-cafe-cielo-dark.svg" alt="Logo de Caf&eacute; Cielo">
+              </div>
+              <div class="phone-theme">&#9728; &#9790;</div>
+            </div>
+
+            <div class="phone-cats" id="phoneCategories"></div>
+            <div class="phone-sections" id="phoneSections"></div>
+
+            <section id="about-mobile" class="phone-info-block">
+              <div class="phone-section-title">
+                <h4>&#10024; Sobre Nosotros</h4>
+                <span>...</span>
+              </div>
+              <article class="phone-copy-card">
+                <p>Somos un caf&eacute; familiar de San Dionisio Ocotepec, hecho para compartir momentos ricos, tranquilos y memorables. En Caf&eacute; Cielo queremos que cada visita se sienta cercana, acogedora y con antojo de volver.</p>
+              </article>
+            </section>
+
+            <section id="contact-mobile" class="phone-info-block">
+              <div class="phone-section-title">
+                <h4>&#128241; Contacto</h4>
+                <span>...</span>
+              </div>
+              <a class="phone-contact-card" href="https://wa.me/529516134521" target="_blank" rel="noreferrer">
+                <strong><i class="fa-brands fa-whatsapp wa-icon" aria-hidden="true"></i> WhatsApp</strong>
+                <p>951 613 4521</p>
+              </a>
+            </section>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about" class="info-panel glass reveal">
+      <div>
+        <p class="eyebrow">Sobre Nosotros</p>
+        <h3>Caf&eacute; de especialidad con coraz&oacute;n familiar.</h3>
+      </div>
+      <p>Somos un caf&eacute; familiar de San Dionisio Ocotepec, creado para que cada visita se sienta cercana, rica y memorable. Queremos que nuestros clientes encuentren un espacio acogedor para desayunar, compartir, trabajar un ratito y volver por ese cafecito que apapacha.</p>
+    </section>
+
+    <section id="contact" class="contact-panel glass reveal">
+      <div>
+        <p class="eyebrow">Contacto</p>
+        <h3>Haz tu pedido o escr&iacute;benos por WhatsApp.</h3>
+      </div>
+      <a class="contact-chip" href="https://wa.me/529516134521" target="_blank" rel="noreferrer">
+        <i class="fa-brands fa-whatsapp wa-icon" aria-hidden="true"></i>
+        <span>951 613 4521</span>
+      </a>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

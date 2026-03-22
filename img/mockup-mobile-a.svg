@@ -1,0 +1,64 @@
+<svg width="900" height="1600" viewBox="0 0 900 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgA" x1="80" y1="40" x2="820" y2="1560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B1D28"/>
+      <stop offset="1" stop-color="#11131B"/>
+    </linearGradient>
+    <linearGradient id="goldA" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFD58C"/>
+      <stop offset="1" stop-color="#D69537"/>
+    </linearGradient>
+    <linearGradient id="cardA" x1="120" y1="260" x2="760" y2="1420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#262938"/>
+      <stop offset="1" stop-color="#1C1F2B"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1600" rx="56" fill="url(#bgA)"/>
+  <rect x="60" y="44" width="780" height="120" rx="34" fill="#202331" stroke="rgba(255,255,255,0.08)"/>
+  <text x="110" y="116" fill="#FFF2E2" font-size="46" font-family="Georgia, serif" font-weight="700">Café Cielo</text>
+  <rect x="700" y="74" width="90" height="60" rx="30" fill="#2C3042"/>
+  <circle cx="760" cy="104" r="24" fill="url(#goldA)"/>
+
+  <text x="90" y="228" fill="#F7ECDD" font-size="32" font-family="Arial" font-weight="700">Edición Barista</text>
+  <rect x="60" y="252" width="780" height="320" rx="36" fill="url(#cardA)" stroke="rgba(255,255,255,0.08)"/>
+  <rect x="92" y="286" width="716" height="174" rx="28" fill="#322419"/>
+  <rect x="92" y="286" width="716" height="174" rx="28" fill="rgba(255,214,145,0.16)"/>
+  <text x="118" y="506" fill="#FFF2E2" font-size="52" font-family="Arial" font-weight="700">Latte Dulce Corazón</text>
+  <text x="118" y="548" fill="#D8C2AE" font-size="28" font-family="Arial">Espresso, leche condensada y crema.</text>
+  <rect x="620" y="490" width="156" height="66" rx="30" fill="url(#goldA)"/>
+  <text x="664" y="534" fill="#FFF8F1" font-size="34" font-family="Arial" font-weight="700">$60</text>
+
+  <g>
+    <rect x="60" y="612" width="180" height="120" rx="28" fill="#2A2E3F"/>
+    <text x="105" y="666" fill="#FFF2E2" font-size="30" font-family="Arial" font-weight="700">Todo</text>
+    <text x="105" y="700" fill="#D5B48A" font-size="24" font-family="Arial">20 items</text>
+    <rect x="260" y="612" width="180" height="120" rx="28" fill="#232635"/>
+    <text x="300" y="684" fill="#EEE2D3" font-size="30" font-family="Arial">Calientes</text>
+    <rect x="460" y="612" width="180" height="120" rx="28" fill="#232635"/>
+    <text x="520" y="684" fill="#EEE2D3" font-size="30" font-family="Arial">Frías</text>
+    <rect x="660" y="612" width="180" height="120" rx="28" fill="#232635"/>
+    <text x="695" y="684" fill="#EEE2D3" font-size="30" font-family="Arial">Comida</text>
+  </g>
+
+  <text x="68" y="810" fill="#FFF2E2" font-size="42" font-family="Arial" font-weight="700">Bebidas Calientes</text>
+
+  <g>
+    <rect x="60" y="846" width="780" height="216" rx="34" fill="#232635" stroke="rgba(255,255,255,0.08)"/>
+    <rect x="88" y="874" width="180" height="160" rx="26" fill="#6C4123"/>
+    <text x="298" y="928" fill="#FFF4E7" font-size="34" font-family="Arial" font-weight="700">Capuchino</text>
+    <text x="298" y="972" fill="#DCC6B0" font-size="26" font-family="Arial">Espresso, leche y espuma</text>
+    <rect x="664" y="916" width="120" height="52" rx="24" fill="#2F3346"/>
+    <text x="692" y="950" fill="#FFD58C" font-size="28" font-family="Arial" font-weight="700">$55</text>
+  </g>
+
+  <g>
+    <rect x="60" y="1092" width="780" height="216" rx="34" fill="#232635" stroke="rgba(255,255,255,0.08)"/>
+    <rect x="88" y="1120" width="180" height="160" rx="26" fill="#7E4B29"/>
+    <text x="298" y="1174" fill="#FFF4E7" font-size="34" font-family="Arial" font-weight="700">Latte Vainilla</text>
+    <text x="298" y="1218" fill="#DCC6B0" font-size="26" font-family="Arial">Espresso, leche y vainilla</text>
+    <rect x="648" y="1162" width="136" height="52" rx="24" fill="#2F3346"/>
+    <text x="676" y="1196" fill="#FFD58C" font-size="28" font-family="Arial" font-weight="700">$60</text>
+  </g>
+
+  <text x="68" y="1410" fill="#D9C6B2" font-size="28" font-family="Arial">Opción A · Editorial elegante con card destacada</text>
+</svg>

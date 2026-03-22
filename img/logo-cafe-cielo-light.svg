@@ -1,0 +1,34 @@
+<svg width="560" height="180" viewBox="0 0 560 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="moonLight" x1="34" y1="22" x2="112" y2="132" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6CB79"/>
+      <stop offset="1" stop-color="#C78222"/>
+    </linearGradient>
+    <linearGradient id="cupLight" x1="36" y1="71" x2="128" y2="134" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E6D3BE"/>
+    </linearGradient>
+    <filter id="softShadow" x="0" y="0" width="560" height="180" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#5A3920" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <path d="M43 54C48 42 59 33 73 29C62 37 56 50 56 65C56 88 73 107 97 112C88 116 78 118 68 116C46 112 31 91 34 69C35 64 38 58 43 54Z" fill="url(#moonLight)"/>
+    <path d="M59 46C66 40 75 36 85 34C77 40 72 49 72 60C72 75 83 88 98 93C92 96 85 98 78 97C62 95 50 84 47 69C45 60 49 51 59 46Z" fill="#FFF6E7" fill-opacity="0.92"/>
+    <circle cx="114" cy="27" r="5" fill="#FFD98D"/>
+    <circle cx="129" cy="20" r="2.5" fill="#FFD98D"/>
+    <path d="M83 49C88 43 95 41 102 44C107 39 116 39 121 45C129 44 136 49 138 57C145 59 149 66 149 73C149 84 140 91 129 91H89C78 91 69 84 69 73C69 62 77 53 83 49Z" fill="#F4E6D5" fill-opacity="0.72"/>
+
+    <path d="M35 98C35 82 47 70 63 70H104C120 70 132 82 132 98V103C132 119 120 131 104 131H63C47 131 35 119 35 103V98Z" fill="url(#cupLight)" stroke="#C9B39A" stroke-width="3"/>
+    <path d="M132 82H143C156 82 166 92 166 105C166 118 156 128 143 128H135" stroke="#B89674" stroke-width="8" stroke-linecap="round"/>
+    <path d="M43 140H138" stroke="#C98B2C" stroke-width="7" stroke-linecap="round"/>
+    <path d="M25 140H156" stroke="#6E4A2D" stroke-opacity="0.24" stroke-width="16" stroke-linecap="round"/>
+    <path d="M41 135H130" stroke="#FFF7EC" stroke-opacity="0.6" stroke-width="6" stroke-linecap="round"/>
+    <path d="M55 66C55 55 63 47 74 44" stroke="#FFF9EF" stroke-width="6" stroke-linecap="round"/>
+    <path d="M69 66C69 57 75 50 84 48" stroke="#FFF9EF" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+
+    <text x="175" y="112" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#4A2D1B">Café Cielo</text>
+    <text x="176" y="114" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#D9B995" opacity="0.28">Café Cielo</text>
+  </g>
+</svg>

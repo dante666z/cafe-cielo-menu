@@ -1,0 +1,69 @@
+<svg width="900" height="1600" viewBox="0 0 900 1600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgB" x1="100" y1="30" x2="820" y2="1550" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#151823"/>
+      <stop offset="1" stop-color="#0D1017"/>
+    </linearGradient>
+    <linearGradient id="glassB" x1="80" y1="240" x2="820" y2="1460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="rgba(255,255,255,0.12)"/>
+      <stop offset="1" stop-color="rgba(255,255,255,0.05)"/>
+    </linearGradient>
+    <linearGradient id="goldB" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFD78F"/>
+      <stop offset="1" stop-color="#D39136"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1600" rx="56" fill="url(#bgB)"/>
+  <rect x="60" y="44" width="780" height="120" rx="34" fill="#1D2130" stroke="rgba(255,255,255,0.08)"/>
+  <text x="110" y="116" fill="#FFF1E2" font-size="46" font-family="Georgia, serif" font-weight="700">Café Cielo</text>
+  <rect x="680" y="74" width="110" height="60" rx="30" fill="#2A2F42"/>
+  <circle cx="748" cy="104" r="24" fill="url(#goldB)"/>
+
+  <g>
+    <rect x="60" y="214" width="140" height="88" rx="28" fill="#202538"/>
+    <text x="91" y="270" fill="#FFF2E2" font-size="28" font-family="Arial" font-weight="700">Todo</text>
+    <rect x="220" y="214" width="160" height="88" rx="28" fill="#151A27" stroke="rgba(255,255,255,0.08)"/>
+    <text x="252" y="270" fill="#D8C4AE" font-size="28" font-family="Arial">Calientes</text>
+    <rect x="400" y="214" width="130" height="88" rx="28" fill="#151A27" stroke="rgba(255,255,255,0.08)"/>
+    <text x="438" y="270" fill="#D8C4AE" font-size="28" font-family="Arial">Frías</text>
+    <rect x="550" y="214" width="170" height="88" rx="28" fill="#151A27" stroke="rgba(255,255,255,0.08)"/>
+    <text x="590" y="270" fill="#D8C4AE" font-size="28" font-family="Arial">Comida</text>
+  </g>
+
+  <text x="68" y="382" fill="#FFF2E2" font-size="42" font-family="Arial" font-weight="700">Todo el menú</text>
+
+  <g>
+    <rect x="60" y="422" width="780" height="168" rx="34" fill="#1C2130" stroke="rgba(255,255,255,0.08)"/>
+    <circle cx="158" cy="506" r="54" fill="#704122"/>
+    <circle cx="158" cy="506" r="58" stroke="rgba(255,255,255,0.08)" stroke-width="10"/>
+    <text x="258" y="482" fill="#FFF4E8" font-size="36" font-family="Arial" font-weight="700">Latte Dulce Corazón</text>
+    <text x="258" y="526" fill="#D7C2AE" font-size="26" font-family="Arial">Especialidad de la casa</text>
+    <rect x="670" y="470" width="120" height="56" rx="28" fill="url(#goldB)"/>
+    <text x="699" y="506" fill="#FFF9F3" font-size="30" font-family="Arial" font-weight="700">$60</text>
+  </g>
+
+  <text x="68" y="676" fill="#FFF2E2" font-size="38" font-family="Arial" font-weight="700">Bebidas Calientes</text>
+  <g>
+    <rect x="60" y="712" width="780" height="154" rx="32" fill="url(#glassB)" stroke="rgba(255,255,255,0.08)"/>
+    <rect x="88" y="738" width="128" height="102" rx="24" fill="#714225"/>
+    <text x="244" y="784" fill="#FFF4E8" font-size="34" font-family="Arial" font-weight="700">Capuchino</text>
+    <text x="244" y="824" fill="#D7C2AE" font-size="24" font-family="Arial">Espresso, leche y espuma</text>
+    <text x="720" y="806" fill="#FFD78F" font-size="34" font-family="Arial" font-weight="700">$55</text>
+  </g>
+  <g>
+    <rect x="60" y="888" width="780" height="154" rx="32" fill="url(#glassB)" stroke="rgba(255,255,255,0.08)"/>
+    <rect x="88" y="914" width="128" height="102" rx="24" fill="#81522F"/>
+    <text x="244" y="960" fill="#FFF4E8" font-size="34" font-family="Arial" font-weight="700">Latte Vainilla</text>
+    <text x="244" y="1000" fill="#D7C2AE" font-size="24" font-family="Arial">Espresso, leche y vainilla</text>
+    <text x="704" y="982" fill="#FFD78F" font-size="34" font-family="Arial" font-weight="700">$60</text>
+  </g>
+  <g>
+    <rect x="60" y="1064" width="780" height="154" rx="32" fill="url(#glassB)" stroke="rgba(255,255,255,0.08)"/>
+    <rect x="88" y="1090" width="128" height="102" rx="24" fill="#6B3B21"/>
+    <text x="244" y="1136" fill="#FFF4E8" font-size="34" font-family="Arial" font-weight="700">Americano</text>
+    <text x="244" y="1176" fill="#D7C2AE" font-size="24" font-family="Arial">Clásico</text>
+    <text x="690" y="1158" fill="#FFD78F" font-size="34" font-family="Arial" font-weight="700">$45-$50</text>
+  </g>
+
+  <text x="68" y="1410" fill="#D9C6B2" font-size="28" font-family="Arial">Opción B · App premium moderna con cards glass</text>
+</svg>
