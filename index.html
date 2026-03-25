@@ -85,16 +85,12 @@
                 <span class="section-dots" aria-hidden="true">...</span>
               </div>
 
-              <div class="featured-card">
-                <div class="featured-media">
-                  <span class="tag">Popular</span>
-                  <img src="img/productos/latte.png" alt="Latte Dulce Coraz&oacute;n">
-                </div>
-                <div class="featured-content">
-                  <div class="tag tag-inline">Popular</div>
-                  <h4>Latte Dulce Coraz&oacute;n</h4>
-                  <p>Espresso, leche condensada, crema y canela.</p>
-                  <button class="price-pill" type="button">$60</button>
+              <div class="featured-carousel" id="featuredCarousel">
+                <div class="featured-track" id="featuredTrack"></div>
+                <div class="featured-controls">
+                  <button class="carousel-btn" id="featuredPrev" type="button" aria-label="Ver recomendado anterior">&#8592;</button>
+                  <div class="carousel-dots" id="featuredDots" aria-label="Indicadores de recomendados"></div>
+                  <button class="carousel-btn" id="featuredNext" type="button" aria-label="Ver siguiente recomendado">&#8594;</button>
                 </div>
               </div>
             </article>
@@ -165,6 +161,21 @@
                 </div>
                 <div class="phone-hero-image phone-hero-image-right">
                   <img src="img/productos/latte.png" alt="Latte especial de Caf&eacute; Cielo">
+                </div>
+              </div>
+            </section>
+
+            <section class="phone-featured-section">
+              <div class="phone-section-title">
+                <h4>&#128293; Recomendados</h4>
+                <span>...</span>
+              </div>
+              <div class="phone-featured-carousel" id="phoneFeaturedCarousel">
+                <div class="phone-featured-track" id="phoneFeaturedTrack"></div>
+                <div class="phone-featured-controls">
+                  <button class="carousel-btn phone-carousel-btn" id="phoneFeaturedPrev" type="button" aria-label="Ver recomendado anterior">&#8592;</button>
+                  <div class="carousel-dots phone-carousel-dots" id="phoneFeaturedDots" aria-label="Indicadores de recomendados"></div>
+                  <button class="carousel-btn phone-carousel-btn" id="phoneFeaturedNext" type="button" aria-label="Ver siguiente recomendado">&#8594;</button>
                 </div>
               </div>
             </section>
