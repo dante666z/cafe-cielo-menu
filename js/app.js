@@ -326,7 +326,7 @@ function renderPhonePreview() {
   phoneSections.innerHTML = sectionGroups
     .map(
       (group) => `
-        <section>
+        <section id="phone-section-${group.categoryId}" data-phone-section="${group.categoryId}">
           <div class="phone-section-title">
             <h4>${group.icon} ${group.title}</h4>
             <span>...</span>
@@ -353,6 +353,20 @@ function renderPhonePreview() {
       `
     )
     .join("");
+}
+
+function scrollToCategoryTarget() {
+  const mobileView = window.matchMedia("(max-width: 900px)").matches;
+
+  if (!mobileView) {
+    const desktopSection = document.getElementById("section-primary");
+    desktopSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+
+  const targetId = activeCategory === "todo" ? "mobileExperience" : `phone-section-${activeCategory}`;
+  const menuSection = document.getElementById(targetId);
+  menuSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function buildFeaturedSlide(item, className) {
@@ -489,10 +503,7 @@ function bindCategoryEvents() {
     button.addEventListener("click", () => {
       activeCategory = button.dataset.category;
       renderUI();
-      const mobileView = window.matchMedia("(max-width: 900px)").matches;
-      const targetId = mobileView ? "mobileExperience" : "section-primary";
-      const menuSection = document.getElementById(targetId);
-      menuSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToCategoryTarget();
     });
   });
 }
