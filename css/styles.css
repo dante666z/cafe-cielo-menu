@@ -896,6 +896,100 @@ body.theme-dark .product-card p {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.phone-hero {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1.1rem 1rem 0;
+  border-radius: 30px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(37, 31, 30, 0.96) 0%, rgba(30, 26, 28, 0.92) 100%),
+    radial-gradient(circle at top right, rgba(215, 155, 67, 0.18), transparent 34%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.2);
+}
+
+.phone-hero-copy,
+.phone-hero-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.phone-hero-copy {
+  text-align: center;
+}
+
+.phone-hero-copy h3 {
+  margin: 0;
+  font-family: "Pacifico", cursive;
+  font-size: clamp(2.15rem, 8vw, 3.15rem);
+  font-weight: 400;
+  line-height: 1.05;
+  color: #fff1e2;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+}
+
+.phone-hero-copy p:last-child {
+  margin: 0 auto;
+  max-width: 18rem;
+  color: #ead8c7;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.phone-hero .eyebrow {
+  color: #d0ab82;
+}
+
+.phone-hero-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0.8rem auto 0.95rem;
+  color: #f0bf73;
+}
+
+.phone-hero-divider span {
+  width: 72px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d79b43, transparent);
+}
+
+.phone-hero-visual {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.15fr);
+  align-items: end;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.phone-hero-image {
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.18);
+}
+
+.phone-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.phone-hero-image-left {
+  transform: translateY(1rem);
+  opacity: 0.9;
+}
+
+.phone-hero-image-left img {
+  aspect-ratio: 1 / 1;
+}
+
+.phone-hero-image-right img {
+  aspect-ratio: 0.82 / 1;
+}
+
 .phone-cats {
   display: flex;
   gap: 0.65rem;
@@ -1329,6 +1423,20 @@ body.theme-dark .product-card p {
     color: #fff8ec;
   }
 
+  body.theme-light .phone-hero {
+    background:
+      linear-gradient(180deg, rgba(66, 48, 36, 0.96) 0%, rgba(50, 39, 34, 0.94) 100%),
+      radial-gradient(circle at top right, rgba(255, 214, 158, 0.18), transparent 34%);
+    border-color: rgba(91, 63, 38, 0.12);
+  }
+
+  body.theme-dark .phone-hero {
+    background:
+      linear-gradient(180deg, rgba(37, 31, 30, 0.96) 0%, rgba(30, 26, 28, 0.92) 100%),
+      radial-gradient(circle at top right, rgba(215, 155, 67, 0.18), transparent 34%);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
   body.theme-light {
     background:
       radial-gradient(circle at top left, rgba(247, 207, 155, 0.38), transparent 24%),
@@ -1404,6 +1512,22 @@ body.theme-dark .product-card p {
   body.theme-light .phone-cat span,
   body.theme-light .phone-cat {
     color: #6f5c4f;
+  }
+
+  body.theme-light .phone-hero-copy h3 {
+    color: #fff1e2;
+  }
+
+  body.theme-light .phone-hero-copy p:last-child {
+    color: #ead8c7;
+  }
+
+  body.theme-light .phone-hero .eyebrow {
+    color: #d4b08a;
+  }
+
+  body.theme-light .phone-hero-divider {
+    color: #efc17b;
   }
 
   body.theme-light .phone-theme {
@@ -1580,6 +1704,32 @@ body.theme-dark .product-card p {
     grid-template-columns: auto auto;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .phone-hero {
+    padding: 1rem 0.85rem 0;
+    border-radius: 26px;
+  }
+
+  .phone-hero-copy h3 {
+    font-size: clamp(1.95rem, 10vw, 2.5rem);
+  }
+
+  .phone-hero-copy p:last-child {
+    max-width: 15.5rem;
+    font-size: 0.92rem;
+  }
+
+  .phone-hero-divider {
+    gap: 0.55rem;
+  }
+
+  .phone-hero-divider span {
+    width: 52px;
+  }
+
+  .phone-hero-visual {
+    gap: 0.55rem;
   }
 
   .phone-section-title h4 {
