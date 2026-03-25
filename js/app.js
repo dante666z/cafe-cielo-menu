@@ -7,6 +7,12 @@ const fallbackImageMap = {
   comida: "americano.png",
 };
 
+const featuredSelections = [
+  { categoryId: "casa", itemName: "Latte Dulce Corazon", badge: "Popular" },
+  { categoryId: "frias", itemName: "Frappe Oreo", badge: "Favorito" },
+  { categoryId: "calientes", itemName: "Moka Latte", badge: "Imperdible" },
+];
+
 const menuData = {
   categories: [
     { id: "todo", label: "Todo", icon: "\u2728", title: "Todo el Menu" },
@@ -84,6 +90,14 @@ const menuData = {
 };
 
 let activeCategory = "todo";
+const carouselTimers = new Map();
+
+function normalizeText(value) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
 
 function getImageSrc(item) {
   return `img/productos/${item.img}`;
@@ -114,6 +128,26 @@ function getSecondaryItems(categoryId) {
     category: menuData.categories.find((item) => item.id === fallback),
     items: menuData.items[fallback].slice(0, 4),
   };
+}
+
+function getFeaturedItems() {
+  return featuredSelections
+    .map((selection) => {
+      const item = menuData.items[selection.categoryId].find(
+        (entry) => normalizeText(entry.nombre) === normalizeText(selection.itemName)
+      );
+
+      if (!item) {
+        return null;
+      }
+
+      return {
+        ...item,
+        categoryId: selection.categoryId,
+        badge: selection.badge || item.badge || "Recomendado",
+      };
+    })
+    .filter(Boolean);
 }
 
 function renderCategories() {
@@ -321,6 +355,135 @@ function renderPhonePreview() {
     .join("");
 }
 
+function buildFeaturedSlide(item, className) {
+  return `
+    <article class="${className}">
+      <div class="${className.includes("phone") ? "phone-featured-media" : "featured-media"}">
+        <span class="tag">${item.badge}</span>
+        <img src="${getImageSrc(item)}" alt="${item.nombre}" data-fallback-category="${item.categoryId}">
+      </div>
+      <div class="${className.includes("phone") ? "phone-featured-content" : "featured-content"}">
+        <div class="tag tag-inline">${item.badge}</div>
+        <h4>${item.nombre}</h4>
+        <p>${item.desc}</p>
+        <div class="${className.includes("phone") ? "phone-price-pill" : "price-pill"}">${item.precio}</div>
+      </div>
+    </article>
+  `;
+}
+
+function setupCarousel(trackId, dotsId, prevId, nextId) {
+  const track = document.getElementById(trackId);
+  const dots = document.getElementById(dotsId);
+  const prev = document.getElementById(prevId);
+  const next = document.getElementById(nextId);
+
+  if (!track || !dots || !prev || !next) {
+    return;
+  }
+
+  if (carouselTimers.has(trackId)) {
+    window.clearInterval(carouselTimers.get(trackId));
+    carouselTimers.delete(trackId);
+  }
+
+  const slides = Array.from(track.children);
+  if (!slides.length) {
+    dots.innerHTML = "";
+    prev.disabled = true;
+    next.disabled = true;
+    return;
+  }
+
+  let activeIndex = 0;
+  let autoplayPaused = false;
+
+  function goToSlide(index) {
+    activeIndex = (index + slides.length) % slides.length;
+    const targetSlide = slides[activeIndex];
+    track.scrollTo({ left: targetSlide.offsetLeft, behavior: "smooth" });
+    Array.from(dots.children).forEach((dot, dotIndex) => {
+      dot.classList.toggle("is-active", dotIndex === activeIndex);
+      dot.setAttribute("aria-current", dotIndex === activeIndex ? "true" : "false");
+    });
+  }
+
+  function startAutoplay() {
+    const autoplayId = window.setInterval(() => {
+      if (autoplayPaused || document.hidden) {
+        return;
+      }
+
+      goToSlide(activeIndex + 1);
+    }, 4200);
+
+    carouselTimers.set(trackId, autoplayId);
+  }
+
+  function pauseAutoplay() {
+    autoplayPaused = true;
+  }
+
+  function resumeAutoplay() {
+    autoplayPaused = false;
+  }
+
+  dots.innerHTML = slides
+    .map(
+      (_, index) => `
+        <button
+          class="carousel-dot ${index === 0 ? "is-active" : ""}"
+          type="button"
+          aria-label="Ir al recomendado ${index + 1}"
+          aria-current="${index === 0 ? "true" : "false"}"
+          data-index="${index}"
+        ></button>
+      `
+    )
+    .join("");
+
+  dots.querySelectorAll("[data-index]").forEach((dot) => {
+    dot.onclick = () => {
+      goToSlide(Number(dot.dataset.index));
+    };
+  });
+
+  prev.onclick = () => {
+    goToSlide(activeIndex - 1);
+  };
+
+  next.onclick = () => {
+    goToSlide(activeIndex + 1);
+  };
+
+  track.onscroll = () => {
+    const slideWidth = slides[0].offsetWidth + 16;
+    const nextIndex = Math.round(track.scrollLeft / slideWidth);
+    if (nextIndex !== activeIndex && nextIndex >= 0 && nextIndex < slides.length) {
+      activeIndex = nextIndex;
+      Array.from(dots.children).forEach((dot, dotIndex) => {
+        dot.classList.toggle("is-active", dotIndex === activeIndex);
+        dot.setAttribute("aria-current", dotIndex === activeIndex ? "true" : "false");
+      });
+    }
+  };
+
+  track.onmouseenter = pauseAutoplay;
+  track.onmouseleave = resumeAutoplay;
+  track.onpointerdown = pauseAutoplay;
+  track.onpointerup = resumeAutoplay;
+  track.onpointerleave = resumeAutoplay;
+  track.onpointercancel = resumeAutoplay;
+  prev.onmouseenter = pauseAutoplay;
+  prev.onmouseleave = resumeAutoplay;
+  next.onmouseenter = pauseAutoplay;
+  next.onmouseleave = resumeAutoplay;
+  dots.onmouseenter = pauseAutoplay;
+  dots.onmouseleave = resumeAutoplay;
+
+  startAutoplay();
+}
+
 function bindCategoryEvents() {
   document.querySelectorAll("[data-category]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -359,22 +522,19 @@ function wireImageFallbacks() {
 }
 
 function renderFeatured() {
-  const featured = menuData.items.casa[0];
-  const featuredMedia = document.querySelector(".featured-media img");
-  const featuredTitle = document.querySelector(".featured-content h4");
-  const featuredDesc = document.querySelector(".featured-content p");
-  const featuredPrice = document.querySelector(".price-pill");
+  const featuredItems = getFeaturedItems();
+  const featuredTrack = document.getElementById("featuredTrack");
+  const phoneFeaturedTrack = document.getElementById("phoneFeaturedTrack");
 
-  if (!featuredMedia || !featuredTitle || !featuredDesc || !featuredPrice) {
+  if (!featuredTrack || !phoneFeaturedTrack) {
     return;
   }
 
-  featuredMedia.src = getImageSrc(featured);
-  featuredMedia.alt = featured.nombre;
-  applyImageFallback(featuredMedia, "casa");
-  featuredTitle.textContent = featured.nombre;
-  featuredDesc.textContent = featured.desc;
-  featuredPrice.textContent = featured.precio;
+  featuredTrack.innerHTML = featuredItems.map((item) => buildFeaturedSlide(item, "featured-card")).join("");
+  phoneFeaturedTrack.innerHTML = featuredItems.map((item) => buildFeaturedSlide(item, "phone-featured-card")).join("");
+
+  setupCarousel("featuredTrack", "featuredDots", "featuredPrev", "featuredNext");
+  setupCarousel("phoneFeaturedTrack", "phoneFeaturedDots", "phoneFeaturedPrev", "phoneFeaturedNext");
 }
 
 function renderUI() {
