@@ -1,24 +1,37 @@
 <svg width="560" height="180" viewBox="0 0 560 180" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="moonLight" x1="34" y1="22" x2="112" y2="132" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F6CB79"/>
-      <stop offset="1" stop-color="#C78222"/>
+    <linearGradient id="moonLight" x1="32" y1="22" x2="114" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD98E"/>
+      <stop offset="1" stop-color="#C97F20"/>
     </linearGradient>
-    <linearGradient id="cupLight" x1="36" y1="71" x2="128" y2="134" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#E6D3BE"/>
+    <linearGradient id="cupLight" x1="36" y1="72" x2="130" y2="136" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF9"/>
+      <stop offset="1" stop-color="#E8D4BF"/>
     </linearGradient>
     <filter id="softShadow" x="0" y="0" width="560" height="180" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#5A3920" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#5A3920" flood-opacity="0.18"/>
+    </filter>
+    <filter id="starGlowLight" x="0" y="0" width="560" height="180" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#FFDFA4" flood-opacity="0.85"/>
     </filter>
   </defs>
 
   <g filter="url(#softShadow)">
-    <path d="M43 54C48 42 59 33 73 29C62 37 56 50 56 65C56 88 73 107 97 112C88 116 78 118 68 116C46 112 31 91 34 69C35 64 38 58 43 54Z" fill="url(#moonLight)"/>
-    <path d="M59 46C66 40 75 36 85 34C77 40 72 49 72 60C72 75 83 88 98 93C92 96 85 98 78 97C62 95 50 84 47 69C45 60 49 51 59 46Z" fill="#FFF6E7" fill-opacity="0.92"/>
-    <circle cx="114" cy="27" r="5" fill="#FFD98D"/>
-    <circle cx="129" cy="20" r="2.5" fill="#FFD98D"/>
-    <path d="M83 49C88 43 95 41 102 44C107 39 116 39 121 45C129 44 136 49 138 57C145 59 149 66 149 73C149 84 140 91 129 91H89C78 91 69 84 69 73C69 62 77 53 83 49Z" fill="#F4E6D5" fill-opacity="0.72"/>
+    <path d="M44 55C49 42 60 33 74 29C63 37 57 50 57 65C57 88 74 107 98 112C89 116 79 118 69 117C47 113 31 92 34 70C35 64 39 59 44 55Z" fill="url(#moonLight)"/>
+    <path d="M60 46C67 40 76 36 86 34C78 41 73 50 73 61C73 76 84 88 99 93C93 97 86 99 79 98C63 96 50 85 47 70C45 61 50 51 60 46Z" fill="#FFF8EC" fill-opacity="0.96"/>
+
+    <g filter="url(#starGlowLight)">
+      <path d="M118 24L120.8 30.2L127.5 31L122.4 35.4L123.8 42L118 38.6L112.2 42L113.6 35.4L108.5 31L115.2 30.2L118 24Z" fill="#FFE09B"/>
+      <path d="M139 16L140.8 20L145.2 20.5L141.9 23.4L142.8 27.8L139 25.6L135.2 27.8L136.1 23.4L132.8 20.5L137.2 20L139 16Z" fill="#FFD27A"/>
+      <circle cx="152" cy="33" r="2.8" fill="#FFE7BA"/>
+    </g>
+
+    <g>
+      <path d="M84 48C89 43 96 41 103 44C108 39 117 39 123 45C131 44 138 49 140 57C147 59 151 66 151 74C151 85 142 93 130 93H89C77 93 68 85 68 74C68 63 77 53 84 48Z" fill="#F7EBDD" fill-opacity="0.9"/>
+      <path d="M84 48C89 43 96 41 103 44C108 39 117 39 123 45C131 44 138 49 140 57C147 59 151 66 151 74C151 85 142 93 130 93H89C77 93 68 85 68 74C68 63 77 53 84 48Z" stroke="#D5BEA6" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M82 63C86 58 92 55 98 56" stroke="#FFFDF7" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+      <path d="M113 52C117 50 122 51 126 54" stroke="#FFFDF7" stroke-width="3" stroke-linecap="round" opacity="0.82"/>
+    </g>
 
     <path d="M35 98C35 82 47 70 63 70H104C120 70 132 82 132 98V103C132 119 120 131 104 131H63C47 131 35 119 35 103V98Z" fill="url(#cupLight)" stroke="#C9B39A" stroke-width="3"/>
     <path d="M132 82H143C156 82 166 92 166 105C166 118 156 128 143 128H135" stroke="#B89674" stroke-width="8" stroke-linecap="round"/>
@@ -28,7 +41,7 @@
     <path d="M55 66C55 55 63 47 74 44" stroke="#FFF9EF" stroke-width="6" stroke-linecap="round"/>
     <path d="M69 66C69 57 75 50 84 48" stroke="#FFF9EF" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
 
-    <text x="175" y="112" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#4A2D1B">Café Cielo</text>
-    <text x="176" y="114" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#D9B995" opacity="0.28">Café Cielo</text>
+    <text x="175" y="112" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#4A2D1B">Caf&#233; Cielo</text>
+    <text x="176" y="114" font-size="78" font-weight="700" font-family="Brush Script MT, Pacifico, Segoe Script, cursive" fill="#D9B995" opacity="0.28">Caf&#233; Cielo</text>
   </g>
 </svg>
