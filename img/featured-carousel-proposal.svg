@@ -1,0 +1,74 @@
+<svg width="1400" height="760" viewBox="0 0 1400 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E1F2A"/>
+      <stop offset="1" stop-color="#2A241F"/>
+    </linearGradient>
+    <linearGradient id="card" x1="120" y1="110" x2="1280" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBF5EE"/>
+      <stop offset="1" stop-color="#EDE0D1"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F6C469"/>
+      <stop offset="1" stop-color="#D5922E"/>
+    </linearGradient>
+    <linearGradient id="coffee" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4B250F"/>
+      <stop offset="1" stop-color="#8A4B25"/>
+    </linearGradient>
+    <filter id="shadow" x="82" y="82" width="1236" height="596" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="760" fill="url(#bg)"/>
+
+  <text x="120" y="70" fill="#FFF1E2" font-family="Arial, sans-serif" font-size="28" font-weight="700">Propuesta: carrusel compacto para recomendados</text>
+  <text x="120" y="100" fill="#D7C4B4" font-family="Arial, sans-serif" font-size="18">Idea: contenido arriba, menos aire muerto, imagen dominante y area de info mas util.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="130" width="1200" height="520" rx="30" fill="url(#card)"/>
+  </g>
+
+  <rect x="130" y="160" width="470" height="460" rx="26" fill="url(#coffee)"/>
+  <circle cx="255" cy="325" r="115" fill="#F7E5D1" opacity="0.94"/>
+  <rect x="205" y="245" width="110" height="175" rx="18" fill="#D9B18E"/>
+  <rect x="228" y="218" width="64" height="52" rx="24" fill="#FFF6EE"/>
+  <rect x="215" y="430" width="90" height="18" rx="9" fill="#E4D3C2"/>
+  <circle cx="360" cy="374" r="82" fill="#F3EEE9"/>
+  <rect x="392" y="348" width="26" height="46" rx="13" stroke="#F3EEE9" stroke-width="14"/>
+  <rect x="304" y="280" width="110" height="28" rx="14" fill="#FFF4EA"/>
+  <circle cx="205" cy="515" r="18" fill="#3D1D0F" opacity="0.55"/>
+  <circle cx="538" cy="228" r="22" fill="#3D1D0F" opacity="0.42"/>
+  <circle cx="548" cy="530" r="28" fill="#3D1D0F" opacity="0.32"/>
+
+  <rect x="640" y="185" width="108" height="34" rx="17" fill="url(#accent)"/>
+  <text x="694" y="208" text-anchor="middle" fill="#FFF8F1" font-family="Arial, sans-serif" font-size="18" font-weight="700">Popular</text>
+
+  <text x="640" y="285" fill="#2B1F18" font-family="Arial, sans-serif" font-size="58" font-weight="800">Latte Dulce Corazon</text>
+  <text x="640" y="330" fill="#7A6558" font-family="Arial, sans-serif" font-size="22">Espresso, leche y leche condensada</text>
+
+  <rect x="640" y="372" width="126" height="62" rx="31" fill="url(#accent)"/>
+  <text x="703" y="412" text-anchor="middle" fill="#FFF8F1" font-family="Arial, sans-serif" font-size="24" font-weight="800">$60</text>
+
+  <text x="640" y="480" fill="#5E4C40" font-family="Arial, sans-serif" font-size="18" font-weight="700">Distribucion propuesta</text>
+  <text x="640" y="512" fill="#7A6558" font-family="Arial, sans-serif" font-size="18">• Imagen al 38-40% del ancho</text>
+  <text x="640" y="540" fill="#7A6558" font-family="Arial, sans-serif" font-size="18">• Texto alineado arriba, no centrado verticalmente</text>
+  <text x="640" y="568" fill="#7A6558" font-family="Arial, sans-serif" font-size="18">• Precio y badge pegados al titulo</text>
+
+  <rect x="1040" y="494" width="210" height="78" rx="20" fill="#F6EFE6" stroke="#D9C7B7"/>
+  <rect x="1058" y="511" width="58" height="44" rx="12" fill="#6B3420"/>
+  <text x="1130" y="528" fill="#2B1F18" font-family="Arial, sans-serif" font-size="15" font-weight="700">Siguiente</text>
+  <text x="1130" y="549" fill="#7A6558" font-family="Arial, sans-serif" font-size="13">Frappe Oreo</text>
+  <text x="1130" y="568" fill="#A57124" font-family="Arial, sans-serif" font-size="13" font-weight="700">Swipe / autoplay</text>
+
+  <circle cx="620" cy="692" r="22" fill="#343542" stroke="#4B4D5E"/>
+  <text x="620" y="700" text-anchor="middle" fill="#FFF1E2" font-family="Arial, sans-serif" font-size="22">←</text>
+  <rect x="671" y="686" width="34" height="12" rx="6" fill="url(#accent)"/>
+  <circle cx="724" cy="692" r="6" fill="#5B4E46"/>
+  <circle cx="744" cy="692" r="6" fill="#5B4E46"/>
+  <circle cx="814" cy="692" r="22" fill="#343542" stroke="#4B4D5E"/>
+  <text x="814" y="700" text-anchor="middle" fill="#FFF1E2" font-family="Arial, sans-serif" font-size="22">→</text>
+
+  <text x="100" y="730" fill="#CDB9A7" font-family="Arial, sans-serif" font-size="16">Si te late esta direccion, la implementamos con esta jerarquia visual.</text>
+</svg>
