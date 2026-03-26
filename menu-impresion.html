@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Impreso | Café Cielo</title>
+  <meta name="description" content="Versión imprimible del menú de Café Cielo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/print-menu.css?v=2026-03-26-1">
+</head>
+<body id="body" class="theme-light">
+  <main class="print-shell">
+    <section class="print-toolbar no-print">
+      <a class="toolbar-link" href="index.html">Volver al menú QR</a>
+      <div class="toolbar-actions">
+        <button class="theme-switch" id="themeToggle" type="button" aria-label="Cambiar tema">
+          <span class="theme-switch-track"></span>
+          <span class="theme-switch-thumb"></span>
+        </button>
+        <button class="print-button" type="button" onclick="window.print()">Imprimir menú</button>
+      </div>
+    </section>
+    <section class="menu-print-grid" id="printMenuGrid"></section>
+  </main>
+
+  <script src="js/menu-data.js?v=2026-03-26-1"></script>
+  <script src="js/menu-print.js?v=2026-03-26-1"></script>
+</body>
+</html>
