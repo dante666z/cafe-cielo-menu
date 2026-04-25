@@ -303,6 +303,7 @@ function renderOrderPanels() {
   const count = getOrderCount();
   const total = formatCurrency(getOrderTotal());
   const storeStatusBanner = document.getElementById("storeStatusBanner");
+  const phoneStoreStatusBanner = document.getElementById("phoneStoreStatusBanner");
 
   const itemsMarkup = Array.from(orderState.entries())
     .map(([key, entry]) => {
@@ -355,8 +356,15 @@ function renderOrderPanels() {
   }
 
   if (storeStatusBanner) {
-    storeStatusBanner.hidden = storeStatus.isOpen && storeStatus.remoteAvailable;
-    storeStatusBanner.textContent = storeStatus.message || "Por ahora no estamos recibiendo pedidos.";
+    storeStatusBanner.hidden = !storeStatus.isOpen;
+    storeStatusBanner.textContent = storeStatus.message || "Estamos recibiendo pedidos";
+    storeStatusBanner.classList.toggle("is-open", storeStatus.isOpen);
+  }
+
+  if (phoneStoreStatusBanner) {
+    phoneStoreStatusBanner.hidden = !storeStatus.isOpen;
+    phoneStoreStatusBanner.textContent = storeStatus.message || "Estamos recibiendo pedidos";
+    phoneStoreStatusBanner.classList.toggle("is-open", storeStatus.isOpen);
   }
 
   document.querySelectorAll("#sendOrderBtn, #sendOrderBtnMobile").forEach((button) => {
