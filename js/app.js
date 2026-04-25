@@ -1,5 +1,404 @@
 let activeCategory = "todo";
 const carouselTimers = new Map();
+const orderState = new Map();
+const whatsappNumber = "529516134521";
+let storeStatus = {
+  isOpen: true,
+  message: "Estamos recibiendo pedidos",
+  deliveryEnabled: false,
+  remoteAvailable: true,
+};
+
+function syncDeliverySelection(source) {
+  const sourceSwitch = document.getElementById(source === "mobile" ? "deliverySwitchMobile" : "deliverySwitch");
+  const targetSwitch = document.getElementById(source === "mobile" ? "deliverySwitch" : "deliverySwitchMobile");
+
+  if (sourceSwitch && targetSwitch) {
+    targetSwitch.checked = sourceSwitch.checked;
+  }
+
+  updateDeliveryUI();
+}
+
+function isDeliverySelected() {
+  return document.getElementById("orderSheet")?.hasAttribute("hidden")
+    ? Boolean(document.getElementById("deliverySwitch")?.checked)
+    : Boolean(document.getElementById("deliverySwitchMobile")?.checked);
+}
+
+function updateDeliveryUI() {
+  const deliverySelected = storeStatus.deliveryEnabled && isDeliverySelected();
+  const copy = deliverySelected ? "Enviar a domicilio" : "Recoger en el café";
+  const note = storeStatus.deliveryEnabled
+    ? ""
+    : "Por el momento no se cuenta con envíos a domicilio, solo para recoger en el café.";
+
+  ["", "Mobile"].forEach((suffix) => {
+    const switchInput = document.getElementById(`deliverySwitch${suffix}`);
+    const copyNode = document.getElementById(`deliveryToggleCopy${suffix}`);
+    const noteNode = document.getElementById(`deliveryNote${suffix}`);
+    const addressLabel = document.getElementById(`customerAddress${suffix}`)?.closest(".order-field")?.querySelector("span");
+
+    if (switchInput) {
+      switchInput.disabled = !storeStatus.deliveryEnabled;
+      if (!storeStatus.deliveryEnabled) {
+        switchInput.checked = false;
+      }
+    }
+
+    if (copyNode) {
+      copyNode.textContent = copy;
+    }
+
+    if (noteNode) {
+      noteNode.hidden = storeStatus.deliveryEnabled;
+      noteNode.textContent = note;
+    }
+
+    if (addressLabel) {
+      addressLabel.textContent = deliverySelected ? "Domicilio y referencias" : "Referencias (opcional si recogerá en el café)";
+    }
+  });
+}
+
+function getMexicoCityNow(timezone = "America/Mexico_City") {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(now);
+  const weekdayMap = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const weekday = weekdayMap[parts.find((part) => part.type === "weekday")?.value] ?? 0;
+  const hour = parts.find((part) => part.type === "hour")?.value ?? "00";
+  const minute = parts.find((part) => part.type === "minute")?.value ?? "00";
+
+  return {
+    weekday,
+    minutes: Number(hour) * 60 + Number(minute),
+  };
+}
+
+function timeStringToMinutes(value) {
+  if (!value) {
+    return null;
+  }
+
+  const [hours, minutes] = value.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
+function resolveStoreStatus(settings, hours) {
+  const mode = settings?.operation_mode || "manual";
+
+  if (mode === "manual") {
+    return {
+      isOpen: Boolean(settings?.manual_is_open),
+      message: settings?.manual_message || (settings?.manual_is_open ? "Estamos recibiendo pedidos." : "Por ahora no estamos recibiendo pedidos."),
+    };
+  }
+
+  const now = getMexicoCityNow(settings?.timezone || "America/Mexico_City");
+  const normalizedHours = Array.isArray(hours) ? hours : [];
+  const today = normalizedHours.find((entry) => Number(entry.day_of_week) === now.weekday);
+
+  if (!today || !today.is_enabled) {
+    return {
+      isOpen: false,
+      message: "Hoy no estamos recibiendo pedidos.",
+    };
+  }
+
+  const openMinutes = timeStringToMinutes(today.open_time);
+  const closeMinutes = timeStringToMinutes(today.close_time);
+
+  if (openMinutes === null || closeMinutes === null) {
+    return {
+      isOpen: false,
+      message: "En este momento estamos fuera de horario de servicio.",
+    };
+  }
+
+  const isOpen = now.minutes >= openMinutes && now.minutes < closeMinutes;
+
+  return {
+    isOpen,
+    message: isOpen ? "Estamos recibiendo pedidos." : "En este momento estamos fuera de horario de servicio.",
+  };
+}
+
+function getItemKey(categoryId, itemName) {
+  return `${categoryId}::${normalizeText(itemName)}`;
+}
+
+function parsePrice(price) {
+  return Number(String(price).replace(/[^0-9.]/g, "")) || 0;
+}
+
+function formatCurrency(value) {
+  return `$${value}`;
+}
+
+function getItemByKey(key) {
+  const [categoryId, itemSlug] = key.split("::");
+  const item = (menuData.items[categoryId] || []).find((entry) => normalizeText(entry.nombre) === itemSlug);
+  return item ? { ...item, categoryId } : null;
+}
+
+function getOrderCount() {
+  let count = 0;
+  orderState.forEach((entry) => {
+    count += entry.quantity;
+  });
+  return count;
+}
+
+function getOrderTotal() {
+  let total = 0;
+  orderState.forEach((entry) => {
+    total += parsePrice(entry.precio) * entry.quantity;
+  });
+  return total;
+}
+
+function showToast(message) {
+  const stack = document.getElementById("toastStack");
+  if (!stack) {
+    return;
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  stack.appendChild(toast);
+
+  window.setTimeout(() => {
+    toast.remove();
+  }, 2200);
+}
+
+function buildOrderControls(item, categoryId, className = "card-actions") {
+  const key = getItemKey(categoryId, item.nombre);
+  const current = orderState.get(key)?.quantity || 0;
+
+  if (!storeStatus.isOpen) {
+    return "";
+  }
+
+  if (current > 0) {
+    return `
+      <div class="${className}">
+        <div class="qty-pill">
+          <button class="qty-btn" type="button" data-order-action="decrease" data-order-key="${key}" aria-label="Quitar una unidad">-</button>
+          <span class="qty-value">${current}</span>
+          <button class="qty-btn" type="button" data-order-action="increase" data-order-key="${key}" aria-label="Agregar una unidad">+</button>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="${className}">
+      <button class="order-btn" type="button" data-order-action="add" data-order-key="${key}">
+        Agregar
+      </button>
+    </div>
+  `;
+}
+
+function syncOrderFields(sourcePrefix) {
+  const sourceName = document.getElementById(sourcePrefix === "mobile" ? "customerNameMobile" : "customerName");
+  const sourceAddress = document.getElementById(sourcePrefix === "mobile" ? "customerAddressMobile" : "customerAddress");
+  const sourceNotes = document.getElementById(sourcePrefix === "mobile" ? "orderNotesMobile" : "orderNotes");
+
+  const targetName = document.getElementById(sourcePrefix === "mobile" ? "customerName" : "customerNameMobile");
+  const targetAddress = document.getElementById(sourcePrefix === "mobile" ? "customerAddress" : "customerAddressMobile");
+  const targetNotes = document.getElementById(sourcePrefix === "mobile" ? "orderNotes" : "orderNotesMobile");
+
+  if (sourceName && targetName) targetName.value = sourceName.value;
+  if (sourceAddress && targetAddress) targetAddress.value = sourceAddress.value;
+  if (sourceNotes && targetNotes) targetNotes.value = sourceNotes.value;
+}
+
+function getOrderCustomerData() {
+  const isMobileOpen = !document.getElementById("orderSheet")?.hasAttribute("hidden");
+  const prefix = isMobileOpen ? "Mobile" : "";
+  return {
+    name: document.getElementById(`customerName${prefix}`)?.value.trim() || "",
+    address: document.getElementById(`customerAddress${prefix}`)?.value.trim() || "",
+    notes: document.getElementById(`orderNotes${prefix}`)?.value.trim() || "",
+    deliveryType: storeStatus.deliveryEnabled && isDeliverySelected() ? "delivery" : "pickup",
+  };
+}
+
+function getSupabaseFallbackStatus() {
+  return {
+    isOpen: false,
+    message: "Por el momento el menú está en modo consulta. Los pedidos en línea no están disponibles.",
+    deliveryEnabled: false,
+    remoteAvailable: false,
+  };
+}
+
+function syncOrderDockToggleIcon() {
+  const orderDock = document.getElementById("orderDock");
+  const orderDockToggle = document.getElementById("orderDockToggle");
+  const icon = orderDockToggle?.querySelector("i");
+
+  if (!orderDock || !orderDockToggle || !icon) {
+    return;
+  }
+
+  const isCollapsed = orderDock.classList.contains("is-collapsed");
+  icon.className = `fa-solid ${isCollapsed ? "fa-chevron-up" : "fa-chevron-down"}`;
+  orderDockToggle.setAttribute("aria-label", isCollapsed ? "Expandir pedido" : "Contraer pedido");
+}
+
+function buildWhatsAppMessage() {
+  const customer = getOrderCustomerData();
+  const lines = ["Hola, quiero hacer este pedido de Café Cielo:", ""];
+
+  if (customer.name) {
+    lines.push(`Nombre: ${customer.name}`, "");
+  }
+
+  lines.push(`Tipo de entrega: ${customer.deliveryType === "delivery" ? "Enviar a domicilio" : "Recoger en el café"}`, "");
+
+  lines.push("Pedido:");
+  orderState.forEach((entry) => {
+    const subtotal = parsePrice(entry.precio) * entry.quantity;
+    lines.push(`- ${entry.quantity}x ${entry.nombre} - ${formatCurrency(subtotal)}`);
+  });
+
+  if (customer.address) {
+    lines.push("", customer.deliveryType === "delivery" ? "Domicilio y referencias:" : "Referencias:", customer.address);
+  }
+
+  if (customer.notes) {
+    lines.push("", "Notas del pedido:", customer.notes);
+  }
+
+  lines.push("", `Total estimado: ${formatCurrency(getOrderTotal())}`);
+  lines.push("", "Quedo pendiente de confirmación de existencias. Gracias.");
+  return lines.join("\n");
+}
+
+function renderOrderPanels() {
+  const orderItems = document.getElementById("orderItems");
+  const orderItemsMobile = document.getElementById("orderItemsMobile");
+  const orderEmptyState = document.getElementById("orderEmptyState");
+  const orderEmptyStateMobile = document.getElementById("orderEmptyStateMobile");
+  const orderTotal = document.getElementById("orderTotal");
+  const orderTotalMobile = document.getElementById("orderTotalMobile");
+  const orderCountPill = document.getElementById("orderCountPill");
+  const mobileOrderSummary = document.getElementById("mobileOrderSummary");
+  const orderDock = document.getElementById("orderDock");
+  const mobileTrigger = document.getElementById("mobileOrderTrigger");
+  const orderSheet = document.getElementById("orderSheet");
+  const orderSheetBackdrop = document.getElementById("orderSheetBackdrop");
+  const count = getOrderCount();
+  const total = formatCurrency(getOrderTotal());
+  const storeStatusBanner = document.getElementById("storeStatusBanner");
+
+  const itemsMarkup = Array.from(orderState.entries())
+    .map(([key, entry]) => {
+      const subtotal = parsePrice(entry.precio) * entry.quantity;
+      return `
+        <article class="order-item">
+          <img src="${getImageSrc(entry)}" alt="${entry.nombre}">
+          <div class="order-item-copy">
+            <h4>${entry.nombre}</h4>
+            <p>${entry.desc}</p>
+            <div class="order-item-meta">
+              <div class="qty-pill">
+                <button class="qty-btn" type="button" data-order-action="decrease" data-order-key="${key}">-</button>
+                <span class="qty-value">${entry.quantity}</span>
+                <button class="qty-btn" type="button" data-order-action="increase" data-order-key="${key}">+</button>
+              </div>
+              <strong>${formatCurrency(subtotal)}</strong>
+            </div>
+            <button class="remove-item-btn" type="button" data-order-action="remove" data-order-key="${key}">Quitar</button>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  if (orderItems) orderItems.innerHTML = itemsMarkup;
+  if (orderItemsMobile) orderItemsMobile.innerHTML = itemsMarkup;
+  if (orderEmptyState) orderEmptyState.hidden = count > 0;
+  if (orderEmptyStateMobile) orderEmptyStateMobile.hidden = count > 0;
+  if (orderTotal) orderTotal.textContent = total;
+  if (orderTotalMobile) orderTotalMobile.textContent = total;
+  if (orderCountPill) orderCountPill.textContent = `${count} ${count === 1 ? "producto" : "productos"}`;
+  if (mobileOrderSummary) mobileOrderSummary.textContent = `${count} • ${total}`;
+
+  if (mobileTrigger) {
+    mobileTrigger.classList.toggle("has-items", count > 0);
+    mobileTrigger.hidden = !storeStatus.isOpen;
+  }
+
+  if (orderDock) {
+    orderDock.hidden = !storeStatus.isOpen;
+  }
+
+  syncOrderDockToggleIcon();
+
+  if (!storeStatus.isOpen) {
+    orderSheet?.setAttribute("hidden", "");
+    orderSheetBackdrop?.setAttribute("hidden", "");
+    document.getElementById("body")?.classList.remove("order-sheet-open");
+  }
+
+  if (storeStatusBanner) {
+    storeStatusBanner.hidden = storeStatus.isOpen && storeStatus.remoteAvailable;
+    storeStatusBanner.textContent = storeStatus.message || "Por ahora no estamos recibiendo pedidos.";
+  }
+
+  document.querySelectorAll("#sendOrderBtn, #sendOrderBtnMobile").forEach((button) => {
+    button.disabled = !storeStatus.isOpen;
+  });
+
+  updateDeliveryUI();
+}
+
+function updateOrder(action, key) {
+  const current = orderState.get(key);
+  const itemData = current || getItemByKey(key);
+
+  if (!itemData) {
+    return;
+  }
+
+  if (action === "add" || action === "increase") {
+    const nextQuantity = (current?.quantity || 0) + 1;
+    orderState.set(key, { ...itemData, quantity: nextQuantity });
+    showToast(`${itemData.nombre} agregado al pedido`);
+  }
+
+  if (action === "decrease") {
+    const nextQuantity = (current?.quantity || 0) - 1;
+    if (nextQuantity <= 0) {
+      orderState.delete(key);
+      showToast(`${itemData.nombre} eliminado del pedido`);
+    } else {
+      orderState.set(key, { ...itemData, quantity: nextQuantity });
+      showToast(`Cantidad actualizada: ${itemData.nombre}`);
+    }
+  }
+
+  if (action === "remove") {
+    orderState.delete(key);
+    showToast(`${itemData.nombre} eliminado del pedido`);
+  }
+
+  renderUI();
+  renderOrderPanels();
+}
 
 function normalizeText(value) {
   return value
@@ -129,6 +528,7 @@ function renderPrimarySection() {
                           <span class="card-price">${item.precio}</span>
                           ${item.badge ? `<span class="card-badge">${item.badge}</span>` : ""}
                         </div>
+                        ${buildOrderControls(item, category.id)}
                       </div>
                     </article>
                   `
@@ -163,6 +563,7 @@ function renderPrimarySection() {
               <span class="card-price">${item.precio}</span>
               ${item.badge ? `<span class="card-badge">${item.badge}</span>` : ""}
             </div>
+            ${buildOrderControls(item, activeCategory)}
           </div>
         </article>
       `
@@ -185,6 +586,7 @@ function renderSecondarySection() {
           <div>
             <h4>${item.nombre}</h4>
             <p>${item.desc}</p>
+            ${buildOrderControls(item, category.id, "stack-card-actions")}
           </div>
           <div class="stack-card-price">${item.precio}</div>
         </article>
@@ -202,6 +604,7 @@ function renderSecondarySection() {
           <div>
             <strong>${item.nombre}</strong>
             <p>${item.desc}</p>
+            ${buildOrderControls(item, "tesLatte", "mini-card-actions")}
           </div>
           <strong>${item.precio}</strong>
         </article>
@@ -252,6 +655,7 @@ function renderPhonePreview() {
                       <h4>${item.nombre}</h4>
                       <p>${item.desc}</p>
                       <div class="phone-price-pill">${item.precio}</div>
+                      ${buildOrderControls(item, group.categoryId, "phone-card-actions")}
                     </div>
                   </article>
                 `
@@ -572,10 +976,165 @@ function setupCategoryDrag() {
   );
 }
 
+function setupOrderInteractions() {
+  document.addEventListener("click", (event) => {
+    const actionButton = event.target.closest("[data-order-action]");
+    if (actionButton) {
+      updateOrder(actionButton.dataset.orderAction, actionButton.dataset.orderKey);
+      return;
+    }
+
+    if (event.target.closest("#mobileOrderTrigger")) {
+      document.getElementById("orderSheet")?.removeAttribute("hidden");
+      document.getElementById("orderSheetBackdrop")?.removeAttribute("hidden");
+      document.getElementById("body")?.classList.add("order-sheet-open");
+      return;
+    }
+
+    if (event.target.closest("#orderSheetClose") || event.target.closest("#orderSheetBackdrop")) {
+      document.getElementById("orderSheet")?.setAttribute("hidden", "");
+      document.getElementById("orderSheetBackdrop")?.setAttribute("hidden", "");
+      document.getElementById("body")?.classList.remove("order-sheet-open");
+      return;
+    }
+
+    if (event.target.closest("#orderDockToggle")) {
+      document.getElementById("orderDock")?.classList.toggle("is-collapsed");
+      syncOrderDockToggleIcon();
+    }
+  });
+
+  ["", "Mobile"].forEach((suffix) => {
+    document.getElementById(`customerName${suffix}`)?.addEventListener("input", () => syncOrderFields(suffix ? "mobile" : "desktop"));
+    document.getElementById(`customerAddress${suffix}`)?.addEventListener("input", () => syncOrderFields(suffix ? "mobile" : "desktop"));
+    document.getElementById(`orderNotes${suffix}`)?.addEventListener("input", () => syncOrderFields(suffix ? "mobile" : "desktop"));
+    document.getElementById(`sendOrderBtn${suffix}`)?.addEventListener("click", handleSendOrder);
+  });
+
+  document.getElementById("deliverySwitch")?.addEventListener("change", () => syncDeliverySelection("desktop"));
+  document.getElementById("deliverySwitchMobile")?.addEventListener("change", () => syncDeliverySelection("mobile"));
+}
+
+async function handleSendOrder() {
+  if (!storeStatus.isOpen) {
+    if (window.Swal) {
+      await Swal.fire({
+        icon: "info",
+        title: "Pedidos deshabilitados",
+        text: storeStatus.message || "Por ahora no estamos recibiendo pedidos.",
+        confirmButtonText: "Entendido",
+      });
+    }
+    return;
+  }
+
+  if (!orderState.size) {
+    if (window.Swal) {
+      await Swal.fire({
+        icon: "info",
+        title: "Tu pedido está vacío",
+        text: "Agrega al menos un producto antes de enviar tu mensaje por WhatsApp.",
+        confirmButtonText: "Entendido",
+      });
+    }
+    return;
+  }
+
+  const customer = getOrderCustomerData();
+
+  const addressRequired = customer.deliveryType === "delivery";
+
+  if (!customer.name || (addressRequired && !customer.address)) {
+    if (window.Swal) {
+      await Swal.fire({
+        icon: "info",
+        title: "Faltan datos del pedido",
+        text: addressRequired
+          ? "Nombre y domicilio con referencias son obligatorios para envío a domicilio."
+          : "Nombre es obligatorio antes de enviar tu pedido por WhatsApp.",
+        confirmButtonText: "Entendido",
+      });
+    }
+    return;
+  }
+
+  const result = window.Swal
+    ? await Swal.fire({
+        icon: "warning",
+        title: "Antes de enviar tu pedido",
+        html: "Tu pedido está sujeto a existencias.<br>Por favor reconfirma disponibilidad, tiempos y detalles al enviar tu mensaje por WhatsApp.",
+        confirmButtonText: "Continuar a WhatsApp",
+        cancelButtonText: "Cancelar",
+        showCancelButton: true,
+        reverseButtons: true,
+      })
+    : { isConfirmed: window.confirm("Tu pedido está sujeto a existencias. ¿Deseas continuar a WhatsApp?") };
+
+  if (!result.isConfirmed) {
+    return;
+  }
+
+  const message = encodeURIComponent(buildWhatsAppMessage());
+  window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank", "noopener");
+}
+
+async function loadStoreStatus() {
+  const supabase = getSupabaseClient();
+
+  if (!supabase) {
+    storeStatus = getSupabaseFallbackStatus();
+    renderUI();
+    renderOrderPanels();
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("store_settings")
+      .select("operation_mode, manual_is_open, manual_message, timezone, delivery_enabled")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (error) {
+      throw error || new Error("No se pudo leer store_settings");
+    }
+
+    const { data: hoursData, error: hoursError } = await supabase
+      .from("store_hours")
+      .select("day_of_week, is_enabled, open_time, close_time")
+      .order("day_of_week", { ascending: true });
+
+    if (hoursError) {
+      throw hoursError;
+    }
+
+    if (!data) {
+      storeStatus = {
+        isOpen: true,
+        message: "Estamos recibiendo pedidos",
+        deliveryEnabled: false,
+        remoteAvailable: true,
+      };
+    } else {
+      storeStatus = resolveStoreStatus(data, Array.isArray(hoursData) ? hoursData : []);
+      storeStatus.deliveryEnabled = Boolean(data.delivery_enabled);
+      storeStatus.remoteAvailable = true;
+    }
+  } catch (error) {
+    storeStatus = getSupabaseFallbackStatus();
+  }
+
+  renderUI();
+  renderOrderPanels();
+}
+
 renderUI();
+renderOrderPanels();
 setupThemeToggle();
 setupMobileNav();
 setupCategoryDrag();
+setupOrderInteractions();
+loadStoreStatus();
 
 window.addEventListener("load", () => {
   window.scrollTo({ top: 0, left: 0, behavior: "auto" });

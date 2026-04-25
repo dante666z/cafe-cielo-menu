@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Café Cielo</title>
+  <meta name="description" content="Panel admin de Café Cielo.">
+  <link rel="icon" type="image/svg+xml" href="img/logo-cafe-cielo-dark.svg?v=2026-04-05-2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-borderless@5/borderless.min.css">
+  <link rel="stylesheet" href="css/admin.css?v=2026-03-26-2">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="admin-card" id="adminLoginCard">
+      <p class="eyebrow">Panel admin</p>
+      <h1>Café Cielo</h1>
+      <p class="admin-copy">Inicia sesión para administrar si el local está recibiendo pedidos.</p>
+
+      <form class="admin-form" id="adminLoginForm">
+        <label>
+          <span>Correo</span>
+          <input id="adminEmail" type="email" placeholder="admin@cafecielo.com" required>
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input id="adminPassword" type="password" placeholder="••••••••" required>
+        </label>
+        <button class="admin-btn" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <section class="admin-card" id="adminPanelCard" hidden>
+      <div class="admin-panel-head">
+        <div>
+          <p class="eyebrow">Configuración</p>
+          <h2>Estado del local</h2>
+        </div>
+        <button class="admin-ghost-btn" id="adminLogoutBtn" type="button">Cerrar sesión</button>
+      </div>
+
+      <form class="admin-form" id="adminSettingsForm">
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h3>Modo de operación</h3>
+            <p>Elige si el local se controla manualmente o por horario.</p>
+          </div>
+
+          <div class="mode-options">
+            <label class="mode-option">
+              <input type="radio" name="operationMode" value="manual" checked>
+              <div>
+                <strong>Manual</strong>
+                <span>Tú decides si está abierto o cerrado.</span>
+              </div>
+            </label>
+
+            <label class="mode-option">
+              <input type="radio" name="operationMode" value="automatic">
+              <div>
+                <strong>Automático</strong>
+                <span>Se abre y cierra según el horario semanal.</span>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <section class="admin-block" id="manualSettingsBlock">
+          <div class="admin-block-head">
+            <h3>Estado manual</h3>
+            <p>Úsalo para abrir o cerrar por excepción.</p>
+          </div>
+
+          <label class="status-toggle">
+            <span>Pedidos habilitados</span>
+            <input id="storeIsOpen" type="checkbox">
+          </label>
+
+          <label>
+            <span>Mensaje para clientes</span>
+            <textarea id="storeStatusMessage" rows="4" placeholder="Estamos recibiendo pedidos"></textarea>
+          </label>
+        </section>
+
+        <section class="admin-block">
+          <div class="admin-block-head">
+            <h3>Envíos a domicilio</h3>
+            <p>Controla si el cliente puede pedir envío o solo recoger en el café.</p>
+          </div>
+
+          <label class="status-toggle">
+            <span>Habilitar envíos a domicilio</span>
+            <input id="deliveryEnabled" type="checkbox">
+          </label>
+        </section>
+
+        <section class="admin-block" id="automaticSettingsBlock" hidden>
+          <div class="admin-block-head">
+            <h3>Horario semanal</h3>
+            <p>Define si cada día está activo y sus horas de apertura.</p>
+          </div>
+
+          <div class="hours-grid" id="hoursGrid"></div>
+        </section>
+
+        <button class="admin-btn" type="submit">Guardar cambios</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/supabase-config.js?v=2026-03-26-1"></script>
+  <script src="js/supabase-client.js?v=2026-03-26-1"></script>
+  <script src="js/admin.js?v=2026-03-26-1"></script>
+</body>
+</html>
