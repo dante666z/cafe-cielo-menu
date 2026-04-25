@@ -8,12 +8,14 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <link rel="icon" type="image/svg+xml" href="img/logo-cafe-cielo-dark.svg?v=2026-04-05-2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-borderless@5/borderless.min.css">
   <!-- Cambia este valor en cada deploy para invalidar cache de CSS/JS sin tocar las imagenes. -->
-  <link rel="stylesheet" href="css/styles.css?v=2026-03-26-3">
+  <link rel="stylesheet" href="css/styles.css?v=2026-03-26-5">
 </head>
 <body id="body" class="theme-dark">
   <div class="page-glow page-glow-left"></div>
@@ -39,8 +41,11 @@
           <span></span>
           <span></span>
         </button>
-        <button class="mode-chip mode-chip-light" type="button" aria-hidden="true">&#9728;</button>
         <button class="theme-switch" id="themeToggle" type="button" aria-label="Cambiar tema">
+          <span class="theme-switch-icon" aria-hidden="true">
+            <i class="fa-solid fa-sun"></i>
+            <i class="fa-regular fa-moon"></i>
+          </span>
           <span class="theme-switch-track"></span>
           <span class="theme-switch-thumb"></span>
         </button>
@@ -79,6 +84,7 @@
     <section id="menu" class="menu-layout reveal">
       <div class="menu-main glass">
         <div class="category-strip" id="categoryStrip" role="tablist" aria-label="Categor&iacute;as del men&uacute;"></div>
+        <div class="store-status-banner" id="storeStatusBanner" hidden></div>
         <p class="menu-note">Las im&aacute;genes son ilustrativas y la presentaci&oacute;n final del producto puede variar.</p>
 
         <section class="content-grid">
@@ -142,14 +148,6 @@
         <div class="phone-frame">
           <div class="phone-notch"></div>
           <div class="phone-screen">
-            <div class="phone-top">
-              <div class="phone-brand">
-                <img class="phone-logo phone-logo-light" src="img/logo-cafe-cielo-light.svg" alt="Logo de Caf&eacute; Cielo">
-                <img class="phone-logo phone-logo-dark" src="img/logo-cafe-cielo-dark.svg" alt="Logo de Caf&eacute; Cielo">
-              </div>
-              <div class="phone-theme">&#9728; &#9790;</div>
-            </div>
-
             <section class="phone-hero">
               <div class="phone-hero-copy">
                 <p class="eyebrow">Edici&oacute;n del barista</p>
@@ -235,7 +233,148 @@
     </section>
   </main>
 
+  <aside class="order-dock glass reveal" id="orderDock">
+    <div class="order-dock-head">
+      <div>
+        <p class="eyebrow">Pedido actual</p>
+        <h3>Tu pedido</h3>
+      </div>
+      <div class="order-dock-tools">
+        <span class="order-count-pill" id="orderCountPill">0 productos</span>
+        <button class="order-dock-toggle" id="orderDockToggle" type="button" aria-label="Contraer pedido">
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="order-empty" id="orderEmptyState">
+      Agrega productos para armar tu pedido y enviarlo por WhatsApp.
+    </div>
+
+    <div class="order-items" id="orderItems"></div>
+
+    <form class="order-form" id="orderForm">
+      <div class="delivery-toggle" id="deliveryToggleBlock">
+        <div>
+          <strong>Tipo de entrega</strong>
+          <p class="delivery-toggle-copy" id="deliveryToggleCopy">Recoger en el café</p>
+        </div>
+        <label class="switch-control">
+          <input id="deliverySwitch" type="checkbox">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+      <p class="delivery-note" id="deliveryNote" hidden></p>
+
+      <label class="order-field">
+        <span>Nombre</span>
+        <input id="customerName" type="text" placeholder="Tu nombre">
+      </label>
+
+      <label class="order-field">
+        <span>Domicilio y referencias</span>
+        <textarea id="customerAddress" rows="3" placeholder="Colonia, calle, referencias..."></textarea>
+      </label>
+
+      <label class="order-field">
+        <span>Notas del pedido (opcional)</span>
+        <textarea id="orderNotes" rows="3" placeholder="Sin az&uacute;car, menos hielo, observaciones..."></textarea>
+      </label>
+
+      <div class="order-summary">
+        <span>Total estimado</span>
+        <strong id="orderTotal">$0</strong>
+      </div>
+
+      <button class="order-send-btn" id="sendOrderBtn" type="button">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        <span>Enviar pedido por WhatsApp</span>
+      </button>
+    </form>
+  </aside>
+
+  <button class="mobile-order-trigger" id="mobileOrderTrigger" type="button">
+    <span>Ver pedido</span>
+    <strong id="mobileOrderSummary">0 • $0</strong>
+  </button>
+
+  <div class="order-sheet-backdrop" id="orderSheetBackdrop" hidden></div>
+  <section class="order-sheet" id="orderSheet" aria-label="Tu pedido" hidden>
+    <div class="order-sheet-head">
+      <div>
+        <p class="eyebrow">Pedido actual</p>
+        <h3>Tu pedido</h3>
+      </div>
+      <button class="order-sheet-close" id="orderSheetClose" type="button" aria-label="Cerrar pedido">&times;</button>
+    </div>
+    <div class="order-sheet-body">
+      <div class="order-empty" id="orderEmptyStateMobile">
+        Agrega productos para armar tu pedido y enviarlo por WhatsApp.
+      </div>
+
+      <div class="order-items" id="orderItemsMobile"></div>
+
+      <form class="order-form" id="orderFormMobile">
+        <div class="delivery-toggle" id="deliveryToggleBlockMobile">
+          <div>
+            <strong>Tipo de entrega</strong>
+            <p class="delivery-toggle-copy" id="deliveryToggleCopyMobile">Recoger en el café</p>
+          </div>
+          <label class="switch-control">
+            <input id="deliverySwitchMobile" type="checkbox">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+        <p class="delivery-note" id="deliveryNoteMobile" hidden></p>
+
+        <label class="order-field">
+          <span>Nombre</span>
+          <input id="customerNameMobile" type="text" placeholder="Tu nombre">
+        </label>
+
+        <label class="order-field">
+          <span>Domicilio y referencias</span>
+          <textarea id="customerAddressMobile" rows="3" placeholder="Colonia, calle, referencias..."></textarea>
+        </label>
+
+        <label class="order-field">
+          <span>Notas del pedido (opcional)</span>
+          <textarea id="orderNotesMobile" rows="3" placeholder="Sin az&uacute;car, menos hielo, observaciones..."></textarea>
+        </label>
+
+        <div class="order-summary">
+          <span>Total estimado</span>
+          <strong id="orderTotalMobile">$0</strong>
+        </div>
+
+        <button class="order-send-btn" id="sendOrderBtnMobile" type="button">
+          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          <span>Enviar pedido por WhatsApp</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+
+  <footer class="site-credit" aria-label="Créditos del sitio">
+    <a
+      class="site-credit-link"
+      href="https://dante666z.github.io/anshar-solutions-landing/"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Desarrollado por Anshar Solutions"
+      data-tooltip="Desarrollado por Anshar Solutions"
+    >
+      <img src="img/anshar-mark.svg" alt="Anshar Solutions">
+    </a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js?v=2026-03-26-1"></script>
+  <script src="js/supabase-client.js?v=2026-03-26-1"></script>
   <script src="js/menu-data.js?v=2026-03-26-1"></script>
-  <script src="js/app.js?v=2026-03-26-4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/app.js?v=2026-03-26-6"></script>
 </body>
 </html>
