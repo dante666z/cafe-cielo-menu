@@ -1084,6 +1084,10 @@ async function handleSendOrder() {
 
   const message = encodeURIComponent(buildWhatsAppMessage());
   window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank", "noopener");
+
+  orderState.clear();
+  renderUI();
+  renderOrderPanels();
 }
 
 async function loadStoreStatus() {
