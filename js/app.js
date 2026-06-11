@@ -1,4 +1,4 @@
-let activeCategory = "todo";
+let activeCategory = "calientes";
 const carouselTimers = new Map();
 const orderState = new Map();
 const whatsappNumber = "529516134521";
